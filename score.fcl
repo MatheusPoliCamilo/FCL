@@ -1,0 +1,50 @@
+FUNCTION_BLOCK
+
+	VAR_INPUT
+		Our_Level		REAL;
+		Enemy_Level	REAL;
+	END_VAR
+
+	VAR_OUTPUT
+		Score REAL;
+	END_VAR
+
+	FUZZIFY Our_Level
+		TERM Noob := (0, 0) (0, 1) (25, 0);
+		TERM Low := (0, 0) (25, 1) (50, 0);
+		TERM Middle := (25, 0) (50, 1) (75, 0);
+		TERM High := (50, 0) (75, 1) (100, 0);
+		TERM Maximum := (75, 0) (100, 1) (100, 0);
+	END_FUZZIFY
+
+	FUZZIFY Enemy_Level
+		TERM Noob := (0, 0) (0, 1) (25, 0);
+		TERM Low := (0, 0) (25, 1) (50, 0);
+		TERM Middle := (25, 0) (50, 1) (75, 0);
+		TERM High := (50, 0) (75, 1) (100, 0);
+		TERM Maximum := (75, 0) (100, 1) (100, 0);
+	END_FUZZIFY
+
+	DEFUZZIFY Score
+		TERM points7 := (0, 0) (0, 1) (12.5, 0);
+		TERM points10 := (0, 0) (12.5, 1) (25, 0);
+		TERM points13 := (12.5, 0) (25, 1) (37.5, 0);
+		TERM points17 := (25, 0) (37.5, 1) (50, 0);
+		TERM points20 := (37.5, 0) (50, 1) (62.5, 0);
+		TERM points23 := (50, 0) (62.5, 1) (75, 0);
+		TERM points27 := (62.5, 0) (75, 1) (87.5, 0);
+		TERM points30 := (75, 0) (87.5, 1) (100, 0);
+		TERM points35 := (87.5, 0) (100, 1) (100, 0);
+	END_DEFUZZIFY 
+
+	RULEBLOCK first
+		AND:MIN;
+		ACCU:MAX;
+		RULE 0: IF (Our_Level IS Noob) AND (Enemy_Level IS Noob) THEN (Score IS points20);
+		RULE 1: IF (Our_Level IS Noob) AND (Enemy_Level IS Low) THEN (Score IS points23);
+		RULE 2: IF (Our_Level IS Noob) AND (Enemy_Level IS Middle) THEN (Score IS points27);
+		RULE 3: IF (Our_Level IS Noob) AND (Enemy_Level IS High) THEN (Score IS points30);
+		RULE 4: IF (Our_Level IS Noob) AND (Enemy_Level IS Maximum) THEN (Score IS points35);
+	END_RULEBLOCK
+	
+END_FUNCTION_BLOCK
